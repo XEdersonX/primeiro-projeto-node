@@ -20,6 +20,9 @@ class User {
   @Column() // por padrao ja vai string
   password: string;
 
+  @Column() // por padrao ja vai string
+  avatar: string;
+
   @CreateDateColumn()
   created_at: Date;
 
