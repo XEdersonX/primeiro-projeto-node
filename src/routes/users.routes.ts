@@ -16,24 +16,20 @@ const upload = multer(uploadConfig);
  */
 
 usersRouter.post('/', async (request, response) => {
-  try {
-    const { name, email, password } = request.body;
+  const { name, email, password } = request.body;
 
-    const createUser = new CreateUserService(); // Instanciar CreateUserService;
+  const createUser = new CreateUserService(); // Instanciar CreateUserService;
 
-    const user = await createUser.execute({
-      name,
-      email,
-      password,
-    });
+  const user = await createUser.execute({
+    name,
+    email,
+    password,
+  });
 
-    delete user.password; // Deleta informacao da senha para nao ser exibida no json.
+  delete user.password; // Deleta informacao da senha para nao ser exibida no json.
 
-    // return response.send(user);
-    return response.json(user);
-  } catch (err) {
-    return response.status(400).json({ error: err.message });
-  }
+  // return response.send(user);
+  return response.json(user);
 });
 
 // Para atualizar uma unica informacao do usuario    avatar é o nome do campo
@@ -44,21 +40,17 @@ usersRouter.patch(
   async (request, response) => {
     // console.log(request.file);
 
-    try {
-      const updateUserAvatar = new UpdateUserAvatarService();
+    const updateUserAvatar = new UpdateUserAvatarService();
 
-      const user = await updateUserAvatar.execute({
-        user_id: request.user.id,
-        avatarFilename: request.file.filename,
-      });
+    const user = await updateUserAvatar.execute({
+      user_id: request.user.id,
+      avatarFilename: request.file.filename,
+    });
 
-      delete user.password; // Deletar password que vai na resposta do json
+    delete user.password; // Deletar password que vai na resposta do json
 
-      // return response.json({ ok: true });
-      return response.json(user);
-    } catch (err) {
-      return response.status(400).json({ error: err.message });
-    }
+    // return response.json({ ok: true });
+    return response.json(user);
   },
 );
 
