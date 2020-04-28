@@ -1,5 +1,7 @@
 import { getRepository } from 'typeorm'; // Se tu nao vai ter um metodo Personalizado tu nao precisa criar Repositorio. Ai tu so importa este metodo typeorm.
 import { compare } from 'bcryptjs';
+import { sign } from 'jsonwebtoken';
+import authConfig from '../config/auth';
 
 import User from '../models/User';
 
@@ -10,6 +12,7 @@ interface Request {
 
 interface Response {
   user: User;
+  token: string;
 }
 
 class AuthenticateUserService {
@@ -33,9 +36,17 @@ class AuthenticateUserService {
       throw new Error('Incorrect email/password combination.');
     }
 
-    // Usuario Autenticado
+    const { secret, expiresIn } = authConfig.jwt;
+
+    // http://www.md5.cz
+    const token = sign({}, secret, {
+      subject: user.id,
+      expiresIn,
+    });
+
     return {
       user,
+      token,
     };
   }
 }
