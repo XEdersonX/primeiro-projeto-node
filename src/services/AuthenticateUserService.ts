@@ -3,6 +3,8 @@ import { compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
 import authConfig from '../config/auth';
 
+import AppError from '../errors/AppError';
+
 import User from '../models/User';
 
 interface Request {
@@ -23,7 +25,7 @@ class AuthenticateUserService {
 
     // Se usuario nao for encontrado. (user === undefined)
     if (!user) {
-      throw new Error('Incorrect email/password combination.');
+      throw new AppError('Incorrect email/password combination.', 401); // ERRO 401 QUE USUARIO NAO FOI AUTORIZADO
     }
 
     // user.password - senha criptografada
@@ -33,7 +35,7 @@ class AuthenticateUserService {
 
     // Se a senha tiver incorreta
     if (!passwordMatched) {
-      throw new Error('Incorrect email/password combination.');
+      throw new AppError('Incorrect email/password combination.', 401);
     }
 
     const { secret, expiresIn } = authConfig.jwt;
