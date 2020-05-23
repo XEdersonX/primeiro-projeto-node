@@ -1,6 +1,7 @@
 import 'reflect-metadata';
 
 import express, { Request, Response, NextFunction } from 'express'; // Posso usar o import no node pq to usando o typescript
+import cors from 'cors';
 import 'express-async-errors';
 
 import routes from './routes';
@@ -9,8 +10,9 @@ import AppError from './errors/AppError';
 
 import './database';
 
-const app = express();
+const app = express(); // Apos criacao do nosso app
 
+app.use(cors()); // Cors evita que alguns sites que nao sejam confiaveis da nossa aplicacao, possam acessar o nosso site. { origin: 'http://localhost:3333' } - bota url que ta executando nosso projeto react em producao
 app.use(express.json());
 app.use('/files', express.static(uploadConfig.directory)); // http://localhost:3333/files/fd7b413e5f5f58ac04cd-GO1.png
 app.use(routes);
